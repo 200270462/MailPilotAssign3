@@ -1,78 +1,113 @@
 ﻿/// <reference path="constants.ts" />
 /// <reference path="managers/asset.ts" />
-/// <reference path="objects/gameobject.ts" />
-/// <reference path="objects/plane.ts" />
-/// <reference path="objects/island.ts" />
 /// <reference path="objects/cloud.ts" />
+/// <reference path="objects/island.ts" />
 /// <reference path="objects/ocean.ts" />
+/// <reference path="objects/bullet.ts" />
+/// <reference path="objects/plane.ts" />
 /// <reference path="objects/scoreboard.ts" />
+/// <reference path="objects/label.ts" />
+/// <reference path="objects/content.ts" />
+/// <reference path="objects/button.ts" />
+/// <reference path="managers/collision.ts" />
 /// <reference path="states/play.ts" />
 /// <reference path="states/menu.ts" />
-/// <reference path="states/gameover.ts" />
+/// <reference path="states/instruction.ts" />
+/// <reference path="states/gameover.ts"/>
+
+// Mail Pilot Version 11 - Added basic state machine structure - Added Button and Label classes
+// Changed online repo
 
 var stage: createjs.Stage;
 var game: createjs.Container;
 
-// game objects
+var ocean: objects.Ocean;
 var plane: objects.Plane;
 var island: objects.Island;
-var clouds = [];
-var ocean: objects.Ocean;
+var clouds = []; // Clouds array;
+var bullets = []; // Bullets array;
+var bulletWasShot: boolean = false;
+var bulletTurn: number = 0;
 var scoreboard: objects.Scoreboard;
+
+var collision: managers.Collision;
+
+var tryAgain: objects.Button;
+var playButton: objects.Button;
+var instructionsButton: objects.Button;
 
 var currentState: number;
 var currentStateFunction;
 
-
-
-// Preload function
+// Preload function - Loads Assets and initializes game;
 function preload(): void {
-    managers.Asset.init();
-    managers.Asset.loader.addEventListener("complete", init);
-    
+    managers.assets.init();
+    managers.assets.loader.addEventListener("complete", init);
 }
 
+// init called after Assets have been loaded.
 function init(): void {
     stage = new createjs.Stage(document.getElementById("canvas"));
-    stage.enableMouseOver(20);
+    stage.enableMouseOver(30);
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener("tick", gameLoop);
+    optimizeForMobile();
+    createjs.Sound.play('background', createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 1, 0);
+    stage.addEventListener("click", bulletShot);
 
     currentState = constants.MENU_STATE;
     changeState(currentState);
+}
 
+function bulletShot(event: MouseEvent): void {
+    if (currentState == constants.PLAY_STATE) {
+        bulletWasShot = true;
+    }
 
-    gameStart();
+}
 
-
+// Add touch support for mobile devices
+function optimizeForMobile() {
+    if (createjs.Touch.isSupported()) {
+        createjs.Touch.enable(stage);
+    }
 }
 
 // Game Loop
 function gameLoop(event): void {
-
     currentStateFunction();
-
     stage.update();
 }
 
-function changeState(state: number) {
-
+function changeState(state: number): void {
+    // Launch Various "screens"
     switch (state) {
         case constants.MENU_STATE:
+            // instantiate menu screen
+            currentState = constants.MENU_STATE;
             currentStateFunction = states.menuState;
-            states.Menu();
+            states.menu();
             break;
+
         case constants.PLAY_STATE:
+            // instantiate play screen
+            currentState = constants.PLAY_STATE;
             currentStateFunction = states.playState;
-            states.Play();
+            states.play();
             break;
+
         case constants.GAME_OVER_STATE:
             currentStateFunction = states.gameOverState;
-            states.GameOver();
+            // instantiate game over screen
+            currentState = constants.GAME_OVER_STATE;
+            states.gameOver();
             break;
+
         case constants.INSTRUCTIONS_STATE:
+            currentState = constants.INSTRUCTIONS_STATE;
+            currentStateFunction = states.instructionsState;
+            states.instructions();
             break;
-
     }
 }
 
@@ -80,83 +115,3 @@ function changeState(state: number) {
 
 
 
-
-
-
-
-function distance(point1: createjs.Point, point2: createjs.Point):number {
-    var p1: createjs.Point;
-    var p2: createjs.Point;
-    var theXs: number;
-    var theYs: number;
-    var result: number;
-
-    p1 = new createjs.Point();
-    p2 = new createjs.Point();
-
-    p1.x = point1.x;
-    p1.y = point1.y;
-    p2.x = point2.x;
-    p2.y = point2.y;
-
-    theXs = p2.x - p1.x;
-    theYs = p2.y - p1.y;
-
-    theXs = theXs * theXs;
-    theYs = theYs * theYs;
-
-    result = Math.sqrt(theXs + theYs);
-
-    return result;
-}
-
-// Check Collision with Plane and Island
-function planeAndIsland() {
-    var p1: createjs.Point = new createjs.Point();
-    var p2: createjs.Point = new createjs.Point();
-
-    p1.x = plane.x;
-    p1.y = plane.y;
-    p2.x = island.x;
-    p2.y = island.y;
-
-    if (distance(p1, p2) <= ((plane.height * 0.5) + (island.height * 0.5))) {
-        createjs.Sound.play("yay");
-        scoreboard.score += 100;
-        island.reset();
-    }
-}
-
-// Check Collision with Plane and Cloud
-function planeAndCloud(theCloud: objects.Cloud) {
-    var p1: createjs.Point = new createjs.Point();
-    var p2: createjs.Point = new createjs.Point();
-    var cloud: objects.Cloud = new objects.Cloud(game);
-
-    cloud = theCloud;
-
-    p1.x = plane.x;
-    p1.y = plane.y;
-    p2.x = cloud.x;
-    p2.y = cloud.y;
-
-    if (distance(p1, p2) <= ((plane.height * 0.5) + (cloud.height * 0.5))) {
-        createjs.Sound.play("thunder");
-        scoreboard.lives -= 1;
-        cloud.reset();
-    }
-}
-
-function collisionCheck() {
-    planeAndIsland();
-
-    for (var count = 0; count < constants.CLOUD_NUM; count++) {
-        planeAndCloud(clouds[count]);
-    }
-}
-
-function gameStart(): void {
-
-
-    
-}

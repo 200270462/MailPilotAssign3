@@ -1,30 +1,41 @@
-﻿module objects {
+﻿/// <reference path="../managers/asset.ts" />
+module objects {
     // Ocean Class
-    export class Ocean extends createjs.Bitmap {
+    export class Ocean {
+        image: createjs.Bitmap;
+        stage: createjs.Stage;
+        game: createjs.Container;
         width: number;
         height: number;
-        game: createjs.Container;
-        dy: number;
-        constructor(game: createjs.Container) {
-            super(managers.Asset.loader.getResult("ocean"));
-            this.width = this.getBounds().width;
-            this.height = this.getBounds().height;
+        dx: number;
+        constructor(stage: createjs.Stage, game: createjs.Container) {
+            this.stage = stage;
             this.game = game;
-            this.dy = 5;
-            this.game.addChild(this);
+            /*this.image = new createjs.Bitmap(managers.Assets.loader.getResult("ocean"));*/
+            this.image = new createjs.Bitmap(managers.assets.loader.getResult("game_background"));
+            this.width = this.image.getBounds().width;
+            this.height = this.image.getBounds().height;
             this.reset();
-        }
 
-        reset() {
-            this.y = -this.height + stage.canvas.height;
+            this.dx = 5;
+
+            game.addChild(this.image);
         }
 
         update() {
-            this.y += this.dy;
-            if (this.y >= 0) {
+            this.image.x -= this.dx;
+            if (this.image.x < stage.canvas.width - this.width) {
                 this.reset();
             }
+        }
 
+        reset() {
+            this.image.x = 0;
+        }
+
+        destroy() {
+            game.removeChild(this.image);
         }
     }
-} 
+
+}

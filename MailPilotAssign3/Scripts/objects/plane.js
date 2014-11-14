@@ -1,25 +1,36 @@
-﻿var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-// Plane Class
+﻿/// <reference path="../managers/asset.ts" />
 var objects;
 (function (objects) {
-    var Plane = (function (_super) {
-        __extends(Plane, _super);
-        function Plane(game) {
-            _super.call(this, "plane", game);
-            this.y = 430;
+    // Plane Class
+    var Plane = (function () {
+        function Plane(stage, game) {
+            this.stage = stage;
+            this.game = game;
 
-            this.game.addChild(this);
+            /*this.image = new createjs.Sprite(managers.Assets.atlas, "plane");*/
+            this.image = new createjs.Sprite(managers.assets.atlas, "plane");
+            this.image.y = 240;
+            this.image.x = 75;
+            this.width = this.image.getBounds().width;
+            this.height = this.image.getBounds().height;
+            this.image.regX = this.width / 2;
+            this.image.regY = this.height / 2;
+            game.addChild(this.image);
+
+            //this.engineSound = createjs.Sound.play('engine', createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 1, 0);
+            this.engineSound = createjs.Sound.play('space_engine', createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 1, 0);
         }
         Plane.prototype.update = function () {
-            this.x = stage.mouseX;
+            this.image.x = this.stage.mouseX;
+            this.image.y = this.stage.mouseY;
+        };
+
+        Plane.prototype.destroy = function () {
+            this.engineSound.stop();
+            game.removeChild(this.image);
         };
         return Plane;
-    })(objects.GameObject);
+    })();
     objects.Plane = Plane;
 })(objects || (objects = {}));
 //# sourceMappingURL=plane.js.map

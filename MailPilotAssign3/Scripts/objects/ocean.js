@@ -1,35 +1,38 @@
-﻿var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
+﻿/// <reference path="../managers/asset.ts" />
 var objects;
 (function (objects) {
     // Ocean Class
-    var Ocean = (function (_super) {
-        __extends(Ocean, _super);
-        function Ocean(game) {
-            _super.call(this, managers.Asset.loader.getResult("ocean"));
-            this.width = this.getBounds().width;
-            this.height = this.getBounds().height;
+    var Ocean = (function () {
+        function Ocean(stage, game) {
+            this.stage = stage;
             this.game = game;
-            this.dy = 5;
-            this.game.addChild(this);
-            this.reset();
-        }
-        Ocean.prototype.reset = function () {
-            this.y = -this.height + stage.canvas.height;
-        };
 
+            /*this.image = new createjs.Bitmap(managers.Assets.loader.getResult("ocean"));*/
+            this.image = new createjs.Bitmap(managers.assets.loader.getResult("game_background"));
+            this.width = this.image.getBounds().width;
+            this.height = this.image.getBounds().height;
+            this.reset();
+
+            this.dx = 5;
+
+            game.addChild(this.image);
+        }
         Ocean.prototype.update = function () {
-            this.y += this.dy;
-            if (this.y >= 0) {
+            this.image.x -= this.dx;
+            if (this.image.x < stage.canvas.width - this.width) {
                 this.reset();
             }
         };
+
+        Ocean.prototype.reset = function () {
+            this.image.x = 0;
+        };
+
+        Ocean.prototype.destroy = function () {
+            game.removeChild(this.image);
+        };
         return Ocean;
-    })(createjs.Bitmap);
+    })();
     objects.Ocean = Ocean;
 })(objects || (objects = {}));
 //# sourceMappingURL=ocean.js.map
