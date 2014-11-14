@@ -1,0 +1,33 @@
+{
+"images": ["assets/images/blueprint.png"],
+"frames": [
+
+    [2, 205, 127, 25], 
+    [131, 205, 127, 25], 
+    [260, 205, 127, 25], 
+    [388, 178, 25, 12], 
+    [2, 2, 384, 201], 
+    [389, 192, 32, 32], 
+    [388, 2, 140, 93], 
+    [389, 97, 127, 25], 
+    [389, 151, 122, 25], 
+    [389, 124, 127, 25]
+],
+"animations": {
+    
+        "black_instructions":[0], 
+        "black_start":[1], 
+        "black_tryagain":[2], 
+        "bullet":[3], 
+        "cloud":[4], 
+        "island":[5], 
+        "plane":[6], 
+        "white_instructions":[7], 
+        "white_start":[8], 
+        "white_tryagain":[9]
+},
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:592549eb00b0650a92704be20c25ba41:7bbaff921c0c9af1dce81c122dd4da61:e5a5dfbb82bac4b75ec5a6d8464c5211$",
+        "Created with TexturePacker (http://www.texturepacker.com) for EaselJS"
+]
+}

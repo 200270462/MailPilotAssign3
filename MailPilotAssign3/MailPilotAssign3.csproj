@@ -93,6 +93,10 @@
     <Content Include="assets\images\blueprint.png" />
     <Content Include="assets\images\bullet.png" />
     <Content Include="assets\images\comp2068-mailpilot.tps" />
+    <Content Include="assets\images\new sprites\31OtBkshPQL._SL500_AA300_.jpg" />
+    <Content Include="assets\images\new sprites\cloud.png" />
+    <Content Include="assets\images\new sprites\island.png" />
+    <Content Include="assets\images\ocean.png" />
     <Content Include="assets\images\ocean2.png" />
     <Content Include="assets\images\white_instructions.png" />
     <Content Include="assets\images\white_start.png" />
@@ -110,6 +114,7 @@
     <Content Include="assets\sounds\space_shot.wav" />
     <Content Include="assets\sounds\thunder.ogg" />
     <Content Include="assets\sounds\yay.ogg" />
+    <Content Include="assets\images\blueprint.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

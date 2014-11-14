@@ -70,6 +70,7 @@ function bulletShot(event: MouseEvent): void {
 function optimizeForMobile() {
     if (createjs.Touch.isSupported()) {
         createjs.Touch.enable(stage);
+        MediaSource.apply;
     }
 }
 
