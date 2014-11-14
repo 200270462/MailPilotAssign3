@@ -14,5 +14,5 @@
     export var GAME_OVER_STATE: number = 2;
     export var INSTRUCTIONS_STATE: number = 3;
 
-    export var INSTRUCTIONS: string = "Drop Mail to each Island (Don't wory if you have to MISS it, LIFE is more important) Beware of Storm cloud you only have 3 chance HAVE A SAFE FLYYYYYY!!!!";
+    export var INSTRUCTIONS: string = "Collect hearts (Don't wory if you have to MISS it, LIFE is more important) Beware of Storm cloud you only have 3 chance HAVE A SAFE FLYYYYYY!!!!";
  } 
